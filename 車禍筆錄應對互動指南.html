@@ -28,24 +28,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Lively Fresh - Light Blue, Bright Green, Soft Yellow, Deep Blue for accents -->
+    <!-- Chosen Palette: Calm Neutrals - Reverted to previous aesthetic -->
     <!-- Application Structure Plan: The app uses a single-page, thematic structure to guide stressed users. It starts with four "Golden Rules" for immediate high-level advice. The core is an interactive accordion Q&A section, allowing users to select specific police questions and see explanations without being overwhelmed. This is followed by a post-statement checklist and a glossary. This task-oriented, progressive disclosure design was chosen over a simple document dump to reduce cognitive load and provide immediate, relevant answers in a high-stress situation. -->
     <!-- Visualization & Content Choices: The source is text-heavy, so the focus is on information architecture, not data visualization. Report Info: The 18 police questions and their legal context. Goal: Inform and guide. Presentation: Interactive accordion list (HTML/JS) to organize Q&A. Goal: Organize. Presentation: Styled HTML/CSS cards for key principles. Goal: Inform. Presentation: A simple process flow diagram for the post-accident timeline using styled HTML/CSS flexbox. Goal: Change/Organize. This avoids complex charts and focuses on clarity and usability for the target user. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            background-color: #F0F8FF; /* 淺藍色背景 */
-            color: #2F4F4F; /* 深海綠色文字 */
+            background-color: #F8F7F4; /* 淺米色背景 */
+            color: #3C3633; /* 深棕色文字 */
         }
         /* 主題顏色 */
-        .bg-primary { background-color: #E0FFFF; } /* 淺青色 */
-        .bg-secondary { background-color: #ADD8E6; } /* 淡藍色 */
-        .text-accent { color: #3CB371; } /* 中等春天綠色 (活潑) */
-        .border-accent { border-color: #3CB371; }
-        .bg-accent { background-color: #3CB371; }
-        .text-strong-accent { color: #4682B4; } /* 鋼藍色 */ /* 用于更重要的標題或強調 */
-        .bg-strong-accent { background-color: #4682B4; }
+        .bg-primary { background-color: #E0E7E9; } /* 淺灰藍色 */
+        .bg-secondary { background-color: #F0EBE3; } /* 淺灰褐色 */
+        .text-accent { color: #7C9D96; } /* 柔和的藍綠色 */
+        .border-accent { border-color: #7C9D96; }
+        .bg-accent { background-color: #7C9D96; }
+        /* Removed text-strong-accent and bg-strong-accent as they belong to the "Lively Fresh" palette */
 
         /* 手風琴效果的 CSS */
         .accordion-content {
@@ -70,26 +69,26 @@
 <body class="antialiased">
     <div class="container mx-auto max-w-4xl px-4 py-8 sm:py-12">
         <header class="text-center mb-10">
-            <h1 class="text-3xl sm:text-4xl font-bold text-strong-accent mb-2">車禍筆錄應對互動指南</h1>
+            <h1 class="text-3xl sm:text-4xl font-bold text-accent mb-2">車禍筆錄應對互動指南</h1>
             <p class="text-lg text-gray-700">為您的權益，做最充足的準備</p>
         </header>
 
         <section id="golden-rules" class="mb-12">
-            <h2 class="text-2xl font-bold text-center text-strong-accent mb-6">筆錄前必讀：四大黃金準則</h2>
+            <h2 class="text-2xl font-bold text-center text-accent mb-6">筆錄前必讀：四大黃金準則</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-primary p-6 rounded-lg shadow">
+                <div class="bg-secondary p-6 rounded-lg shadow">
                     <h3 class="font-bold text-xl mb-2 text-accent">① 冷靜陳述，只說事實</h3>
                     <p class="text-gray-700">描述親眼所見，不加油添醋、不猜測。若不確定距離、速度，就說「無法準確估計」。</p>
                 </div>
-                <div class="bg-primary p-6 rounded-lg shadow">
+                <div class="bg-secondary p-6 rounded-lg shadow">
                     <h3 class="font-bold text-xl mb-2 text-accent">② 避免自責與推測性字眼</h3>
                     <p class="text-gray-700">絕不說「可能是我太快」、「應該是我的錯」。責任歸屬交由專業判定，切勿主動攬責。</p>
                 </div>
-                <div class="bg-primary p-6 rounded-lg shadow">
+                <div class="bg-secondary p-6 rounded-lg shadow">
                     <h3 class="font-bold text-xl mb-2 text-accent">③ 主動提供有利證據</h3>
                     <p class="text-gray-700">主動告知警方自己或對方的行車記錄器、附近監視器、目擊證人，並清楚說明對方違規行為。</p>
                 </div>
-                <div class="bg-primary p-6 rounded-lg shadow">
+                <div class="bg-secondary p-6 rounded-lg shadow">
                     <h3 class="font-bold text-xl mb-2 text-accent">④ 簽名前務必仔細核對</h3>
                     <p class="text-gray-700">筆錄是法律文件，簽名後極難修改。內容有誤或遺漏，務必當場請警方更正後再簽名。</p>
                 </div>
@@ -97,15 +96,15 @@
         </section>
 
         <section id="interactive-qa">
-            <h2 class="text-2xl font-bold text-center text-strong-accent mb-6">警方問題互動指南</h2>
+            <h2 class="text-2xl font-bold text-center text-accent mb-6">警方問題互動指南</h2>
             <p class="text-center text-gray-700 mb-8">點擊下方問題，查看應對策略與常見陷阱。</p>
             <div id="accordion-container" class="space-y-4">
             </div>
         </section>
         
         <section id="checklist" class="mt-12">
-            <h2 class="text-2xl font-bold text-center text-strong-accent mb-6">筆錄後續流程與權益</h2>
-             <div class="bg-secondary p-6 rounded-lg shadow">
+            <h2 class="text-2xl font-bold text-center text-accent mb-6">筆錄後續流程與權益</h2>
+             <div class="bg-primary p-6 rounded-lg shadow">
                 <p class="mb-6 text-center text-gray-700">完成筆錄只是第一步，接下來的流程與您的權益息息相關。請務必留意以下關鍵時間點與文件。</p>
                 <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-2 text-center">
                     <div class="flex-1">
@@ -158,7 +157,7 @@
             const button = document.createElement('button');
             button.className = 'accordion-button w-full text-left p-6 flex justify-between items-center bg-primary hover:bg-opacity-80 transition-colors';
             button.innerHTML = `
-                <span class="font-bold text-lg text-strong-accent">${item.q}</span>
+                <span class="font-bold text-lg text-accent">${item.q}</span>
                 <span class="arrow-icon text-accent">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
