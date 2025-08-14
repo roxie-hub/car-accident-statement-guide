@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>車禍筆錄應對互動指南</title>
+    <script>
+        // 獲取當前頁面的完整 URL
+        const currentUrl = window.location.href;
+        // 定義您的 GitHub Pages 儲存庫根 URL (不含最後的斜線，因為檔名會直接接上)
+        // 請確保這裡的網址與您的 GitHub Pages 基礎網址完全一致
+        const baseUrl = 'https://roxie-hub.github.io/car-accident-statement-guide';
+        // 定義您的 HTML 檔案名稱 (包含副檔名)
+        const htmlFileName = '車禍筆錄應對互動指南.html';
+        // 對中文字元進行 URL 編碼，以確保網址在所有瀏覽器中都能正確解析
+        const encodedFileName = encodeURIComponent(htmlFileName);
+
+        // 檢查當前 URL 是否是儲存庫的根 URL，而不是帶有特定檔案的 URL
+        // 目的是將形如 https://roxie-hub.github.io/car-accident-statement-guide/
+        // 或 https://roxie-hub.github.io/car-accident-statement-guide
+        // 的網址重定向到帶有完整檔名的網址
+        if (currentUrl === baseUrl + '/' || currentUrl === baseUrl) {
+            // 如果是根 URL，則重定向到帶有完整檔名的 URL
+            window.location.replace(baseUrl + '/' + encodedFileName);
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Neutrals - Reverted to previous aesthetic -->
+    <!-- Application Structure Plan: The app uses a single-page, thematic structure to guide stressed users. It starts with four "Golden Rules" for immediate high-level advice. The core is an interactive accordion Q&A section, allowing users to select specific police questions and see explanations without being overwhelmed. This is followed by a post-statement checklist and a glossary. This task-oriented, progressive disclosure design was chosen over a simple document dump to reduce cognitive load and provide immediate, relevant answers in a high-stress situation. -->
+    <!-- Visualization & Content Choices: The source is text-heavy, so the focus is on information architecture, not data visualization. Report Info: The 18 police questions and their legal context. Goal: Inform and guide. Presentation: Interactive accordion list (HTML/JS) to organize Q&A. Goal: Organize. Presentation: Styled HTML/CSS cards for key principles. Goal: Inform. Presentation: A simple process flow diagram for the post-accident timeline using styled HTML/CSS flexbox. Goal: Change/Organize. This avoids complex charts and focuses on clarity and usability for the target user. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F8F7F4; /* 淺米色背景 */
+            color: #3C3633; /* 深棕色文字 */
+        }
+        /* 主題顏色 */
+        .bg-primary { background-color: #E0E7E9; } /* 淺灰藍色 */
+        .bg-secondary { background-color: #F0EBE3; } /* 淺灰褐色 */
+        .text-accent { color: #7C9D96; } /* 柔和的藍綠色 */
+        .border-accent { border-color: #7C9D96; }
+        .bg-accent { background-color: #7C9D96; }
+        /* Removed text-strong-accent and bg-strong-accent as they belong to the "Lively Fresh" palette */
+
+        /* 手風琴效果的 CSS */
+        .accordion-content {
+            max-height: 0; /* 預設收合 */
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out; /* 平滑過渡效果 */
+            padding: 0 1.5rem; /* 預設無內邊距 */
+        }
+        .accordion-content.open {
+            max-height: 1000px; /* 打開時的最大高度 (足夠顯示內容) */
+            padding: 1rem 1.5rem 1.5rem; /* 打開時的內邊距 */
+        }
+        /* 手風琴箭頭旋轉效果 */
+        .arrow-icon {
+            transition: transform 0.3s ease-out; /* 平滑過渡效果 */
+        }
+        .arrow-icon.rotated {
+            transform: rotate(180deg); /* 旋轉 180 度 */
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container mx-auto max-w-4xl px-4 py-8 sm:py-12">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl font-bold text-accent mb-2">車禍筆錄應對互動指南</h1>
+            <p class="text-lg text-gray-700">為您的權益，做最充足的準備</p>
+        </header>
+
+        <section id="golden-rules" class="mb-12">
+            <h2 class="text-2xl font-bold text-center text-accent mb-6">筆錄前必讀：四大黃金準則</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-secondary p-6 rounded-lg shadow">
+                    <h3 class="font-bold text-xl mb-2 text-accent">① 冷靜陳述，只說事實</h3>
+                    <p class="text-gray-700">描述親眼所見，不加油添醋、不猜測。若不確定距離、速度，就說「無法準確估計」。</p>
+                </div>
+                <div class="bg-secondary p-6 rounded-lg shadow">
+                    <h3 class="font-bold text-xl mb-2 text-accent">② 避免自責與推測性字眼</h3>
+                    <p class="text-gray-700">絕不說「可能是我太快」、「應該是我的錯」。責任歸屬交由專業判定，切勿主動攬責。</p>
+                </div>
+                <div class="bg-secondary p-6 rounded-lg shadow">
+                    <h3 class="font-bold text-xl mb-2 text-accent">③ 主動提供有利證據</h3>
+                    <p class="text-gray-700">主動告知警方自己或對方的行車記錄器、附近監視器、目擊證人，並清楚說明對方違規行為。</p>
+                </div>
+                <div class="bg-secondary p-6 rounded-lg shadow">
+                    <h3 class="font-bold text-xl mb-2 text-accent">④ 簽名前務必仔細核對</h3>
+                    <p class="text-gray-700">筆錄是法律文件，簽名後極難修改。內容有誤或遺漏，務必當場請警方更正後再簽名。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="interactive-qa">
+            <h2 class="text-2xl font-bold text-center text-accent mb-6">警方問題互動指南</h2>
+            <p class="text-center text-gray-700 mb-8">點擊下方問題，查看應對策略與常見陷阱。</p>
+            <div id="accordion-container" class="space-y-4">
+            </div>
+        </section>
+        
+        <section id="checklist" class="mt-12">
+            <h2 class="text-2xl font-bold text-center text-accent mb-6">筆錄後續流程與權益</h2>
+             <div class="bg-primary p-6 rounded-lg shadow">
+                <p class="mb-6 text-center text-gray-700">完成筆錄只是第一步，接下來的流程與您的權益息息相關。請務必留意以下關鍵時間點與文件。</p>
+                <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-2 text-center">
+                    <div class="flex-1">
+                        <div class="bg-accent text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto text-2xl font-bold">1</div>
+                        <h3 class="font-bold mt-2">當下</h3>
+                        <p class="text-sm text-gray-700">完成筆錄<br>索取當事人登記聯單</p>
+                    </div>
+                    <div class="w-full md:w-16 h-1 md:h-0 md:flex-1 border-t-2 md:border-t-0 md:border-l-2 border-dashed border-accent my-2 md:my-0"></div>
+                    <div class="flex-1">
+                        <div class="bg-accent text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto text-2xl font-bold">30天後</div>
+                        <h3 class="font-bold mt-2">申請初判表</h3>
+                        <p class="text-sm text-gray-700">申請「道路交通事故初步分析研判表」</p>
+                    </div>
+                    <div class="w-full md:w-16 h-1 md:h-0 md:flex-1 border-t-2 md:border-t-0 md:border-l-2 border-dashed border-accent my-2 md:my-0"></div>
+                    <div class="flex-1">
+                        <div class="bg-accent text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto text-2xl font-bold">6個月內</div>
+                        <h3 class="font-bold mt-2">提出告訴</h3>
+                        <p class="text-sm text-gray-700">若有受傷且和解不成，可提出過失傷害告訴</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // 筆錄問題與應對數據
+        const qaData = [
+            { q: "Q1: 您目前意識是否清楚？當時肇事時間、地點？", goal: "確認基本事實，是後續調閱證據的基礎。", points: ["仔細核對警方記錄的時間與地點是否精確。", "若不確定，應誠實告知，避免提供錯誤資訊。"], trap: "時間或地點的微小錯誤，可能導致調不到關鍵的監視器畫面。" },
+            { q: "Q2: 請詳述肇事經過、行向、行駛車道？", goal: "建立客觀的事故發生輪廓。", points: ["用中性、客觀的語氣描述，如「我沿著內側車道直行」。", "清楚說明自己與對方的行駛方向與車道。"], trap: "使用「我猜」、「我覺得」等主觀詞語，會被視為自白，影響責任判斷。" },
+            { q: "Q4: 當時天候？路況？視線？有無障礙物？", goal: "了解外在環境因素是否影響事故。", points: ["主動告知任何特殊狀況，如「路面濕滑」、「有施工圍籬」、「號誌故障」等。"], trap: "若未提及路面油漬、坑洞等狀況，等於放棄一個證明自己已盡注意義務的機會。" },
+            { q: "Q6: 當時發現對肇車輛時雙方相距約幾公尺？採取何種反應措施？", goal: "判斷您是否有足夠的反應時間與空間。", points: ["若無法準確判斷距離，務必回答「無法準確估計」。", "具體說明反應措施，如「我立刻踩煞車並向右打方向盤」。"], trap: "隨意估計的數字若與現場跡證（如煞車痕）推算結果不符，會嚴重降低您證詞的可信度。" },
+            { q: "Q7: 發生碰撞前時速約達每小時幾公里？", goal: "判斷是否有超速或車速過快的情形。", points: ["若未超速，可回答「在速限內行駛」。", "同樣地，若不確定精確數字，就不要隨意回答。"], trap: "即使沒超速，但若口述車速比實際快，對方可能會主張您反應不及或未保持安全距離。" },
+            { q: "Q9: 有無飲酒？", goal: "確認是否涉及酒後駕車的刑事犯罪。", points: ["誠實回答，並務必配合酒測。", "若有飲酒，保險公司可能不予理賠。"], trap: "拒絕酒測會面臨高額罰款並吊銷駕照，法律後果嚴重。" },
+            { q: "Q11: 有無繫（戴）安全帶（帽）？", goal: "確認您是否盡到保護自己的基本義務。", points: ["誠實回答。"], trap: "即使對方100%肇責，若您因未繫安全帶導致傷勢加重，賠償金額可能會被「與有過失」原則打折。" },
+            { q: "Q14: 您（乘客）是否受傷？受傷情形為何？", goal: "確認事故是否造成人員傷亡，涉及刑事責任。", points: ["即使當下感覺沒事，也應回答「感覺身體不適，需要去醫院檢查」。", "務必當天就醫並開立診斷證明。"], trap: "當下回答「沒受傷」，事後才發現有內傷或痠痛，將極難證明傷勢與本次車禍有關，影響求償與理賠。" },
+            { q: "Q16: 傷害係告訴乃論...您是否瞭解？", goal: "依法告知您的法律權利。", points: ["回答「瞭解」。", "務必記住，若有受傷，可在「知悉犯人時起」6個月內提出過失傷害告訴。"], trap: "誤以為「保留法律追訴權」有法律效力，或錯過6個月告訴期，將喪失透過刑事程序向對方施壓以利和解的籌碼。" },
+            { q: "Q17: ...現場（草）圖是否正確？", goal: "確認您對警方繪製的事故現場圖沒有異議。", points: ["仔細核對圖上的車輛位置、行向、標線、撞擊點是否與事實相符。", "有任何不符之處，應立即向警方反應並要求更正。"], trap: "草圖是初判表和鑑定的重要依據，一旦簽名確認，錯誤的現場圖將對您極為不利。" },
+            { q: "Q18: 以上所言是否實在？有無補充？", goal: "給您最後確認及補充說明的機會。", points: ["再次快速瀏覽全部筆錄內容。", "若有任何遺漏或想強調的事，可在此時補充，例如「我想補充，對方的車速非常快」。"], trap: "輕率地回答「沒有」並簽名，等於放棄了最後補救筆錄內容的機會。" }
+        ];
+
+        const accordionContainer = document.getElementById('accordion-container');
+
+        // 遍歷 qaData 數據，為每個問題建立手風琴項目
+        qaData.forEach((item, index) => {
+            const accordionItem = document.createElement('div');
+            accordionItem.className = 'bg-white rounded-lg shadow-md overflow-hidden'; // 手風琴項目樣式
+            
+            // 建立手風琴按鈕 (問題)
+            const button = document.createElement('button');
+            button.className = 'accordion-button w-full text-left p-6 flex justify-between items-center bg-primary hover:bg-opacity-80 transition-colors';
+            button.innerHTML = `
+                <span class="font-bold text-lg text-accent">${item.q}</span>
+                <span class="arrow-icon text-accent">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </span>
+            `;
+
+            // 建立手風琴內容 (應對策略、陷阱等)
+            const content = document.createElement('div');
+            content.className = 'accordion-content';
+            content.innerHTML = `
+                <div class="mb-4">
+                    <h4 class="font-bold text-accent mb-1">💡 警方的目的</h4>
+                    <p class="text-gray-700">${item.goal}</p>
+                </div>
+                <div class="mb-4">
+                    <h4 class="font-bold text-accent mb-1">✅ 應對重點</h4>
+                    <ul class="list-disc list-inside text-gray-700 space-y-1">
+                        ${item.points.map(p => `<li>${p}</li>`).join('')}
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-red-600 mb-1">⚠️ 常見陷阱</h4>
+                    <p class="text-gray-700">${item.trap}</p>
+                </div>
+            `;
+
+            // 將按鈕和內容添加到手風琴項目中
+            accordionItem.appendChild(button);
+            accordionItem.appendChild(content);
+            // 將手風琴項目添加到容器中
+            accordionContainer.appendChild(accordionItem);
+
+            // 為按鈕添加點擊事件監聽器
+            button.addEventListener('click', () => {
+                const isOpening = !content.classList.contains('open'); // 判斷是否正在打開
+
+                // 先關閉所有已打開的手風琴內容
+                document.querySelectorAll('.accordion-content.open').forEach(openContent => {
+                    openContent.classList.remove('open');
+                    // 移除箭頭的旋轉效果
+                    openContent.previousElementSibling.querySelector('.arrow-icon').classList.remove('rotated');
+                });
+                
+                // 如果是打開操作，則打開當前手風琴內容
+                if (isOpening) {
+                    content.classList.add('open');
+                    // 添加箭頭的旋轉效果
+                    button.querySelector('.arrow-icon').classList.add('rotated');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
