@@ -9,15 +9,15 @@
         const currentUrl = window.location.href;
         // 定義您的 GitHub Pages 儲存庫根 URL (不含最後的斜線，因為檔名會直接接上)
         // 請確保這裡的網址與您的 GitHub Pages 基礎網址完全一致
-        const baseUrl = 'https://roxie-hub.github.io/car-accident-statement-guide';
+        const baseUrl = 'https://roxie-hub.github.io/handle-accident'; // <-- 根據您提供的新網址調整為專案根路徑
         // 定義您的 HTML 檔案名稱 (包含副檔名)
-        const htmlFileName = '車禍筆錄應對互動指南.html';
+        const htmlFileName = 'index.html'; // <-- 調整為您的首頁檔案名稱
         // 對中文字元進行 URL 編碼，以確保網址在所有瀏覽器中都能正確解析
         const encodedFileName = encodeURIComponent(htmlFileName);
 
         // 檢查當前 URL 是否是儲存庫的根 URL，而不是帶有特定檔案的 URL
-        // 目的是將形如 https://roxie-hub.github.io/car-accident-statement-guide/
-        // 或 https://roxie-hub.github.io/car-accident-statement-guide
+        // 目的是將形如 https://roxie-hub.github.io/handle-accident/
+        // 或 https://roxie-hub.github.io/handle-accident
         // 的網址重定向到帶有完整檔名的網址
         if (currentUrl === baseUrl + '/' || currentUrl === baseUrl) {
             // 如果是根 URL，則重定向到帶有完整檔名的 URL
@@ -28,15 +28,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <!-- Chosen Palette: Calm Neutrals - Reverted to previous aesthetic -->
     <!-- Application Structure Plan: The app uses a single-page, thematic structure to guide stressed users. It starts with four "Golden Rules" for immediate high-level advice. The core is an interactive accordion Q&A section, allowing users to select specific police questions and see explanations without being overwhelmed. This is followed by a post-statement checklist and a glossary. This task-oriented, progressive disclosure design was chosen over a simple document dump to reduce cognitive load and provide immediate, relevant answers in a high-stress situation. -->
     <!-- Visualization & Content Choices: The source is text-heavy, so the focus is on information architecture, not data visualization. Report Info: The 18 police questions and their legal context. Goal: Inform and guide. Presentation: Interactive accordion list (HTML/JS) to organize Q&A. Goal: Organize. Presentation: Styled HTML/CSS cards for key principles. Goal: Inform. Presentation: A simple process flow diagram for the post-accident timeline using styled HTML/CSS flexbox. Goal: Change/Organize. This avoids complex charts and focuses on clarity and usability for the target user. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Noto Sans TC', sans-serif;
             background-color: #F8F7F4; /* 淺米色背景 */
             color: #3C3633; /* 深棕色文字 */
+            /* 建議用於額外保護 (會影響使用者選取文字，但容易被繞過) */
+            /* user-select: none; */
+            /* -webkit-user-select: none; */
+            /* -moz-user-select: none; */
+            /* -ms-user-select: none; */
         }
         /* 主題顏色 */
         .bg-primary { background-color: #E0E7E9; } /* 淺灰藍色 */
@@ -44,7 +50,6 @@
         .text-accent { color: #7C9D96; } /* 柔和的藍綠色 */
         .border-accent { border-color: #7C9D96; }
         .bg-accent { background-color: #7C9D96; }
-        /* Removed text-strong-accent and bg-strong-accent as they belong to the "Lively Fresh" palette */
 
         /* 手風琴效果的 CSS */
         .accordion-content {
@@ -64,13 +69,78 @@
         .arrow-icon.rotated {
             transform: rotate(180deg); /* 旋轉 180 度 */
         }
+
+        /* SVG Text Container Styles */
+        .svg-text-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem; /* 根據佈局調整 */
+            padding: 0 1rem; /* 確保在小螢幕上有邊距 */
+        }
+        .svg-text-container svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Message box for iframe detection */
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 2px solid #7C9D96; /* 使用 accent color */
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #3C3633; /* 使用深棕色文字 */
+            max-width: 90%;
+            width: 400px;
+        }
+        .message-box button {
+            background-color: #7C9D96; /* 使用 accent color */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .message-box button:hover {
+            background-color: #63857E; /* accent color 的深色版本 */
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+        }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased" oncontextmenu="return false;"> <!-- Added oncontextmenu to disable right-click -->
+
+    <!-- Message box for iframe detection -->
+    <div id="iframe-message-overlay" class="overlay hidden"></div>
+    <div id="iframe-message-box" class="message-box hidden">
+        <p>為了獲得最佳瀏覽體驗並確保內容的完整性，建議您直接訪問本網頁的原始連結。</p>
+        <button id="iframe-message-close">前往原始連結</button>
+    </div>
+
     <div class="container mx-auto max-w-4xl px-4 py-8 sm:py-12">
         <header class="text-center mb-10">
             <h1 class="text-3xl sm:text-4xl font-bold text-accent mb-2">車禍筆錄應對互動指南</h1>
-            <p class="text-lg text-gray-700">為您的權益，做最充足的準備</p>
+            <!-- Original text paragraph will be replaced by SVG via JavaScript -->
+            <div id="intro-text-svg-container" class="svg-text-container">
+                <!-- SVG will be injected here -->
+            </div>
         </header>
 
         <section id="golden-rules" class="mb-12">
@@ -210,6 +280,108 @@
                 }
             });
         });
+
+        // --- Content Protection Enhancements ---
+
+        // Function to convert text to SVG and inject it
+        function textToSVG(text, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            // Get font styles from body for consistency
+            const bodyStyle = window.getComputedStyle(document.body);
+            const fontFamily = bodyStyle.fontFamily.split(',')[0].trim(); // Get first font
+            // Use a default size or derive from parent, then convert to px
+            const fontSize = parseFloat(window.getComputedStyle(container).fontSize) || 18; 
+            const textColor = window.getComputedStyle(container).color || '#3C3633'; // Use ink color
+
+            const svgNS = "http://www.w3.org/2000/svg";
+            const svg = document.createElementNS(svgNS, "svg");
+
+            // Create a temporary text element to measure its width/height
+            const tempText = document.createElement("span");
+            tempText.style.fontFamily = fontFamily;
+            tempText.style.fontSize = fontSize + 'px';
+            tempText.style.visibility = 'hidden';
+            tempText.style.position = 'absolute';
+            tempText.innerText = text;
+            document.body.appendChild(tempText);
+
+            const textWidth = tempText.offsetWidth;
+            const textHeight = tempText.offsetHeight;
+            document.body.removeChild(tempText);
+
+            // Set a viewBox that roughly matches the text dimensions,
+            // adding some padding and ensuring it scales well.
+            const paddingX = 10;
+            const paddingY = 5;
+            const viewBoxWidth = textWidth + (paddingX * 2);
+            const viewBoxHeight = textHeight + (paddingY * 2);
+
+            svg.setAttribute("viewBox", `0 0 ${viewBoxWidth} ${viewBoxHeight}`);
+            svg.setAttribute("width", "100%"); // Make it responsive
+            svg.setAttribute("height", "auto");
+            svg.setAttribute("role", "img"); // For accessibility
+            svg.setAttribute("aria-label", "Decorative text image: " + text); // Alt text for accessibility
+
+            const textNode = document.createElementNS(svgNS, "text");
+            textNode.setAttribute("x", paddingX);
+            textNode.setAttribute("y", fontSize + paddingY); // Adjust y based on font size
+            textNode.setAttribute("font-family", fontFamily);
+            textNode.setAttribute("font-size", fontSize + "px");
+            textNode.setAttribute("fill", textColor);
+            textNode.textContent = text;
+
+            svg.appendChild(textNode);
+            container.appendChild(svg);
+        }
+
+        // Apply SVG conversion to the introductory paragraph
+        const introTextContent = "為您的權益，做最充足的準備";
+        textToSVG(introTextContent, 'intro-text-svg-container');
+
+
+        // Intercept copy event to add copyright notice
+        document.addEventListener('copy', function(e) {
+            e.preventDefault(); // Prevent default copy action
+
+            const selectedText = window.getSelection().toString();
+            // Customize your notice - IMPORTANT: Update the URL to your actual GitHub Pages URL
+            const copyrightNotice = "\n\n--- 本內容受著作權保護，未經授權禁止轉載與複製 ---\n來源：車禍筆錄應對互動指南 " + baseUrl + "/" + encodedFileName + "\n"; // 使用動態 URL
+
+            // Set the new clipboard data
+            if (e.clipboardData) {
+                e.clipboardData.setData('text/plain', selectedText + copyrightNotice);
+            } else if (window.clipboardData && window.clipboardData.setData) {
+                // For IE
+                window.clipboardData.setData('Text', selectedText + copyrightNotice);
+            }
+        });
+
+        // Detect if page is embedded in an iframe and display a message
+        function detectIframeAndWarn() {
+            // Check if window.self is not the top window (meaning it's in an iframe)
+            if (window.self !== window.top) {
+                const messageBox = document.getElementById('iframe-message-box');
+                const overlay = document.getElementById('iframe-message-overlay');
+                const closeButton = document.getElementById('iframe-message-close');
+
+                if (messageBox && overlay && closeButton) {
+                    messageBox.classList.remove('hidden');
+                    overlay.classList.remove('hidden');
+
+                    closeButton.addEventListener('click', () => {
+                        // Open the original page URL in a new tab
+                        window.open(baseUrl + "/" + encodedFileName, '_blank');
+                    });
+                }
+            }
+        }
+
+        // Call the iframe detection function when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', detectIframeAndWarn);
     </script>
 </body>
 </html>
+
+
